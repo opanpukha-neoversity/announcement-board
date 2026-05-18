@@ -1,0 +1,21 @@
+{
+  "name": "announcement-board",
+  "version": "1.0.0",
+  "description": "Node.js homework: announcement board with Express, EJS and Prisma",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.8.2"
+  }
+}

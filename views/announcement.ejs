@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= announcement.title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container narrow">
+    <a class="back-link" href="/">← На головну</a>
+
+    <article class="details-card">
+      <span class="badge"><%= categories[announcement.category] || '📌 Інше' %></span>
+      <h1><%= announcement.title %></h1>
+
+      <div class="meta">
+        <span>Ціна: <strong><%= announcement.price %> грн</strong></span>
+        <span>Опубліковано: <strong><%= formatDate(announcement.createdAt) %></strong></span>
+      </div>
+
+      <section class="details-section">
+        <h2>Опис</h2>
+        <p class="full-description"><%= announcement.description %></p>
+      </section>
+
+      <section class="contact-box">
+        <h2>Контакти:</h2>
+        <p><%= announcement.contactInfo %></p>
+      </section>
+
+      <button id="delete-btn" class="btn danger" type="button">Видалити</button>
+    </article>
+  </main>
+
+  <script>
+    const deleteBtn = document.querySelector('#delete-btn');
+    const announcementId = <%= announcement.id %>;
+
+    deleteBtn.addEventListener('click', async () => {
+      if (!confirm('Ви впевнені що хочете видалити це оголошення?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/announcements/${announcementId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          window.location.href = '/';
+        } else {
+          alert('Помилка при видаленні');
+        }
+      } catch (error) {
+        alert('Помилка при видаленні');
+      }
+    });
+  </script>
+</body>
+</html>

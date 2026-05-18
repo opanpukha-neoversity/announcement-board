@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дошка оголошень</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <div>
+        <h1>Дошка оголошень</h1>
+        <p class="muted">Шукайте товари, послуги, роботу та інші пропозиції.</p>
+      </div>
+      <a class="btn primary" href="/announcements">Додати оголошення</a>
+    </header>
+
+    <section class="toolbar">
+      <form class="search-form" action="/" method="GET">
+        <input
+          type="text"
+          name="search"
+          placeholder="Шукати оголошення..."
+          value="<%= search %>"
+        >
+
+        <select name="sort">
+          <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Новіші спочатку</option>
+          <option value="oldest" <%= sort === 'oldest' ? 'selected' : '' %>>Старіші спочатку</option>
+        </select>
+
+        <button class="btn" type="submit">Знайти</button>
+      </form>
+    </section>
+
+    <% if (announcements.length === 0) { %>
+      <div class="empty-state">
+        <h2>Оголошень не знайдено</h2>
+        <p>Спробуйте змінити пошуковий запит або створіть перше оголошення.</p>
+      </div>
+    <% } else { %>
+      <section class="cards">
+        <% announcements.forEach((announcement) => { %>
+          <article class="card">
+            <div class="card-topline">
+              <span class="badge"><%= categories[announcement.category] || '📌 Інше' %></span>
+              <span class="date"><%= formatDate(announcement.createdAt) %></span>
+            </div>
+
+            <h2><%= announcement.title %></h2>
+            <p class="description"><%= truncate(announcement.description, 100) %></p>
+
+            <div class="card-footer">
+              <strong class="price"><%= announcement.price %> грн</strong>
+              <a href="/announcements/<%= announcement.id %>">Детальніше →</a>
+            </div>
+          </article>
+        <% }) %>
+      </section>
+    <% } %>
+
+    <% if (totalPages > 1) { %>
+      <nav class="pagination" aria-label="Пагінація">
+        <% if (currentPage > 1) { %>
+          <a class="page-link" href="<%= buildPageUrl(currentPage - 1, search, sort) %>">Попередня</a>
+        <% } else { %>
+          <span class="page-link disabled">Попередня</span>
+        <% } %>
+
+        <% for (let page = 1; page <= totalPages; page++) { %>
+          <% if (page === currentPage) { %>
+            <span class="page-link active"><%= page %></span>
+          <% } else { %>
+            <a class="page-link" href="<%= buildPageUrl(page, search, sort) %>"><%= page %></a>
+          <% } %>
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+          <a class="page-link" href="<%= buildPageUrl(currentPage + 1, search, sort) %>">Наступна</a>
+        <% } else { %>
+          <span class="page-link disabled">Наступна</span>
+        <% } %>
+      </nav>
+    <% } %>
+  </main>
+</body>
+</html>
